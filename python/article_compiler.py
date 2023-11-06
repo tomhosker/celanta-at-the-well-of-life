@@ -14,7 +14,8 @@ from .constants import (
     CONTENT_MARKER,
     DEFAULT_LATEX_COMMAND,
     DEFAULT_STEM,
-    TEX_EXT
+    TEX_EXT,
+    PDF_EXT
 )
 from .tex_compiler import TexCompiler
 from .utils import get_contents, get_title
@@ -22,6 +23,7 @@ from .utils import get_contents, get_title
 # Local constants.
 ARTICLE_TEMPLATE = \
     get_contents(str(PATH_OBJ_TO_SCAFFOLDING/"article_template.tex"))
+ARTICLE_STEM = "article"
 
 ##############
 # MAIN CLASS #
@@ -34,10 +36,10 @@ class ArticleCompiler(TexCompiler):
             path_to_content,
             path_to_tex=DEFAULT_STEM+TEX_EXT,
             latex_command=DEFAULT_LATEX_COMMAND,
-            delete_tex=True
+            preserve_tex=False
         ):
         super().__init__()
-        self.delete_tex = delete_tex
+        self.preserve_tex = preserve_tex
         self.title = get_title(path_to_content)
         self.content = get_contents(path_to_content)
         self.packages = get_contents(PATH_TO_PACKAGES)
@@ -58,10 +60,14 @@ class ArticleCompiler(TexCompiler):
     def clean(self):
         """ Remove any generated files as necessary. """
         super().clean()
-        if self.delete_tex:
+        if not self.preserve_tex:
             Path(self.path_to_tex).unlink()
 
     def compile(self):
         """ As with the parent's method, but build the TeX file first. """
+        path_obj_to_tex = Path(self.path_to_tex)
+        path_obj_to_pdf = path_obj_to_tex.parent/(path_obj_to_tex.stem+PDF_EXT)
+        new_path_obj_to_pdf = path_obj_to_tex.parent/(ARTICLE_STEM+PDF_EXT)
         self.build_tex()
         super().compile()
+        path_obj_to_pdf.rename(new_path_obj_to_pdf)
