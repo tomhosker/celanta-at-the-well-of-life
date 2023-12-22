@@ -5,9 +5,12 @@ This code defines a class which compiles a given poem or story into a PDF.
 # Standard imports.
 from pathlib import Path
 
+# Non-standard imports.
+from hpml import HPMLCompiler
+
 # Local imports.
 from .constants import (
-    PATH_OBJ_TO_SCAFFOLDING,
+    PATH_OBJ_TO_TEX,
     PATH_TO_PACKAGES,
     PACKAGES_MARKER,
     TITLE_MARKER,
@@ -15,14 +18,14 @@ from .constants import (
     DEFAULT_LATEX_COMMAND,
     DEFAULT_STEM,
     TEX_EXT,
-    PDF_EXT
+    PDF_EXT,
+    HPML_EXT
 )
 from .tex_compiler import TexCompiler
 from .utils import get_contents, get_title
 
 # Local constants.
-ARTICLE_TEMPLATE = \
-    get_contents(str(PATH_OBJ_TO_SCAFFOLDING/"article_template.tex"))
+ARTICLE_TEMPLATE = get_contents(str(PATH_OBJ_TO_TEX/"article_template.tex"))
 ARTICLE_STEM = "article"
 
 ##############
@@ -40,9 +43,21 @@ class ArticleCompiler(TexCompiler):
         ):
         super().__init__()
         self.preserve_tex = preserve_tex
+        self.is_poem = get_is_poem(path_to_content)
         self.title = get_title(path_to_content)
-        self.content = get_contents(path_to_content)
+        self.content = self.build_content_tex(path_to_content)
         self.packages = get_contents(PATH_TO_PACKAGES)
+
+    def build_content_tex(self, path_to_content):
+        """ Transform the raw content into LaTeX, if necessary """
+        raw_content = get_contents(path_to_content)
+        if self.is_poem:
+            hpml_compiler = HPMLCompiler(input_string=raw_content)
+            result = hpml_compiler.compile()
+        else:
+            result = raw_content
+        print(result)
+        return result
 
     def build_tex(self):
         """ Build the TeX file, which we will then compile. """
@@ -54,6 +69,7 @@ class ArticleCompiler(TexCompiler):
         )
         for pair in find_replace_pairs:
             tex = tex.replace(*pair)
+        print(tex)
         with open(self.path_to_tex, "w") as tex_file:
             tex_file.write(tex)
 
@@ -71,3 +87,14 @@ class ArticleCompiler(TexCompiler):
         self.build_tex()
         super().compile()
         path_obj_to_pdf.rename(new_path_obj_to_pdf)
+
+####################
+# HELPER FUNCTIONS #
+####################
+
+def get_is_poem(path_to_content):
+    """ Determine whether the content is a poem. """
+    path_obj_to_content = Path(path_to_content)
+    if path_obj_to_content.suffix == HPML_EXT:
+        return True
+    return False

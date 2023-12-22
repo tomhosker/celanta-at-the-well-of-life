@@ -10,7 +10,7 @@ from python.article_compiler import ArticleCompiler, ARTICLE_STEM
 from python.constants import PATH_OBJ_TO_POEMS
 
 # Local constants.
-PATH_TO_ARTICLE = str(PATH_OBJ_TO_POEMS/"test.tex")
+PATH_TO_ARTICLE = str(PATH_OBJ_TO_POEMS/"test.hpml")
 
 ###########
 # TESTING #
