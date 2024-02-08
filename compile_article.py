@@ -29,6 +29,13 @@ def make_parser():
         dest="preserve_tex",
         help="Preserve the .tex file used to build the PDF"
     )
+    result.add_argument(
+        "--prose-poem",
+        action="store_true",
+        default=False,
+        dest="is_prose_poem",
+        help="Declare a prose poem"
+    )
     return result
 
 def run():
@@ -38,7 +45,8 @@ def run():
     compiler = \
         ArticleCompiler(
             path_to_content=arguments.path_to_content,
-            preserve_tex=arguments.preserve_tex
+            preserve_tex=arguments.preserve_tex,
+            is_prose_poem=arguments.is_prose_poem
         )
     compiler.compile()
 

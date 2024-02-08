@@ -19,4 +19,11 @@
     slash-left-kern=-.3em
 }
 
-\usepackage[hidelinks]{hyperref}  % Must be last.
+\usepackage[hidelinks]{hyperref} % Must be last.
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}

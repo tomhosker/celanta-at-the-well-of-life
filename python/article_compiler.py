@@ -39,10 +39,12 @@ class ArticleCompiler(TexCompiler):
             path_to_content,
             path_to_tex=DEFAULT_STEM+TEX_EXT,
             latex_command=DEFAULT_LATEX_COMMAND,
-            preserve_tex=False
+            preserve_tex=False,
+            is_prose_poem=False
         ):
         super().__init__()
         self.preserve_tex = preserve_tex
+        self.is_prose_poem = is_prose_poem
         self.is_poem = get_is_poem(path_to_content)
         self.title = get_title(path_to_content)
         self.content = self.build_content_tex(path_to_content)
@@ -52,7 +54,11 @@ class ArticleCompiler(TexCompiler):
         """ Transform the raw content into LaTeX, if necessary """
         raw_content = get_contents(path_to_content)
         if self.is_poem:
-            hpml_compiler = HPMLCompiler(input_string=raw_content)
+            hpml_compiler = \
+                HPMLCompiler(
+                    input_string=raw_content,
+                    is_prose_poem=self.is_prose_poem
+                )
             result = hpml_compiler.compile()
         else:
             result = raw_content
@@ -69,7 +75,6 @@ class ArticleCompiler(TexCompiler):
         )
         for pair in find_replace_pairs:
             tex = tex.replace(*pair)
-        print(tex)
         with open(self.path_to_tex, "w") as tex_file:
             tex_file.write(tex)
 
