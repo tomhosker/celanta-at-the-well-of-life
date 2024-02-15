@@ -13,7 +13,7 @@ PATH_OBJ_TO_POEMS = PATH_OBJ_TO_BASE/"poems"
 PATH_OBJ_TO_STORIES = PATH_OBJ_TO_BASE/"stories"
 
 # Paths.
-PATH_TO_PACKAGES = str(PATH_OBJ_TO_TEX/"packages.tex")
+PATH_TO_ARTICLE_TEMPLATE = str(PATH_OBJ_TO_TEX/"article_template.tex")
 
 # Markers.
 PACKAGES_MARKER = "#PACKAGES"
@@ -28,3 +28,4 @@ HPML_EXT = ".hpml"
 # Other constants.
 DEFAULT_LATEX_COMMAND = "lualatex"
 DEFAULT_STEM = "main"
+TEMP_STEM = "temp"

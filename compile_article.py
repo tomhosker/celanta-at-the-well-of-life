@@ -23,6 +23,12 @@ def make_parser():
         help="The path to the content of the article to be compiled"
     )
     result.add_argument(
+        "--path-to-output",
+        default="temp.pdf",
+        dest="path_to_output",
+        help="The path to which we want our document to be compiled"
+    )
+    result.add_argument(
         "--preserve-tex",
         action="store_true",
         default=False,
@@ -45,6 +51,7 @@ def run():
     compiler = \
         ArticleCompiler(
             path_to_content=arguments.path_to_content,
+            path_to_output=arguments.path_to_output,
             preserve_tex=arguments.preserve_tex,
             is_prose_poem=arguments.is_prose_poem
         )

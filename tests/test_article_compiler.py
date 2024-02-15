@@ -6,8 +6,8 @@ This code tests the ArticleCompiler class.
 from pathlib import Path
 
 # Source imports.
-from python.article_compiler import ArticleCompiler, ARTICLE_STEM
-from python.constants import PATH_OBJ_TO_POEMS
+from python.article_compiler import ArticleCompiler
+from python.constants import PATH_OBJ_TO_POEMS, TEMP_STEM, PDF_EXT
 
 # Local constants.
 PATH_TO_ARTICLE = str(PATH_OBJ_TO_POEMS/"test.hpml")
@@ -18,8 +18,8 @@ PATH_TO_ARTICLE = str(PATH_OBJ_TO_POEMS/"test.hpml")
 
 def test_compile():
     """ Test that the .compile() method works as intended. """
-    path_obj_to_pdf = Path()/(ARTICLE_STEM+".pdf")
-    compiler = ArticleCompiler(path_to_content=str(PATH_TO_ARTICLE))
+    path_obj_to_pdf = Path.cwd()/(TEMP_STEM+PDF_EXT)
+    compiler = ArticleCompiler(path_to_content=PATH_TO_ARTICLE)
     compiler.compile()
     # Check that the generated files are in order.
     assert path_obj_to_pdf.exists()
@@ -29,12 +29,9 @@ def test_compile():
 
 def test_compile_preserve_tex():
     """ As above, but also test that the TeX file is preserved if requested. """
-    path_obj_to_pdf = Path()/(ARTICLE_STEM+".pdf")
+    path_obj_to_pdf = Path.cwd()/(TEMP_STEM+PDF_EXT)
     compiler = \
-        ArticleCompiler(
-            path_to_content=str(PATH_TO_ARTICLE),
-            preserve_tex=True
-        )
+        ArticleCompiler(path_to_content=PATH_TO_ARTICLE, preserve_tex=True)
     compiler.compile()
     # Check that the generated files are in order.
     path_obj_to_tex = Path(compiler.path_to_tex)

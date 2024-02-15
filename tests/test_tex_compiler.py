@@ -6,10 +6,11 @@ This code tests the TexCompiler class.
 from pathlib import Path
 
 # Source imports.
+from python.constants import TEMP_STEM, PDF_EXT
 from python.tex_compiler import TexCompiler
 
 # Local constants.
-PATH_OBJ_TO_THIS_DIR = Path(__file__).resolve().parent
+PATH_OBJ_TO_THIS_DIR = Path(__file__).parent
 PATH_OBJ_TO_TEX_TO_COMPILE = PATH_OBJ_TO_THIS_DIR/"test_files"/"standalone.tex"
 
 ###########
@@ -19,7 +20,7 @@ PATH_OBJ_TO_TEX_TO_COMPILE = PATH_OBJ_TO_THIS_DIR/"test_files"/"standalone.tex"
 def test_compile():
     """ Test that the .compile() method works as intended. """
     stem = PATH_OBJ_TO_TEX_TO_COMPILE.stem
-    path_obj_to_pdf = Path()/(stem+".pdf")
+    path_obj_to_pdf = Path.cwd()/(TEMP_STEM+PDF_EXT)
     compiler = TexCompiler(path_to_tex=str(PATH_OBJ_TO_TEX_TO_COMPILE))
     compiler.compile()
     # Check that the generated files are in order.
