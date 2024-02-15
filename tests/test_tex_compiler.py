@@ -28,3 +28,20 @@ def test_compile():
     assert not (Path()/(stem+".aux")).exists()
     # Clean.
     path_obj_to_pdf.unlink()
+
+def test_compile_preserve_tex():
+    """ As above, but also test that the TeX file is preserved if requested. """
+    path_obj_to_pdf = Path.cwd()/(TEMP_STEM+PDF_EXT)
+    compiler = \
+        TexCompiler(
+            path_to_tex=str(PATH_OBJ_TO_TEX_TO_COMPILE),
+            preserve_tex=True
+        )
+    compiler.compile()
+    # Check that the generated files are in order.
+    path_obj_to_tex = Path(compiler.path_to_tex)
+    assert path_obj_to_pdf.exists()
+    assert path_obj_to_tex.exists()
+    # Clean.
+    path_obj_to_pdf.unlink()
+    path_obj_to_tex.unlink()
