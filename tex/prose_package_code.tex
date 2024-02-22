@@ -1,0 +1,17 @@
+\usepackage{mathtools, marginnote, microtype}
+
+\newcommand\blindfootnote[1]{%
+    \begingroup
+    \renewcommand\thefootnote{}\footnote{#1}%
+    \addtocounter{footnote}{-1}%
+    \endgroup
+}
+\newcommand\divsep{
+    \bigskip
+    \begin{center}
+        \rule{0.75\textwidth}{0.5pt}
+    \end{center}
+    \bigskip
+    \bigskip
+}
+\newcommand\smallmarginnote[1]{\marginnote{\footnotesize #1}}

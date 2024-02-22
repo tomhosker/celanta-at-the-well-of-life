@@ -5,6 +5,9 @@ This code defines some utilities used across the codebase.
 # Standard imports.
 from pathlib import Path
 
+# Local imports.
+from .constants import PATH_TO_PROSE_PACKAGE_CODE
+
 #############
 # UTILITIES #
 #############
@@ -20,3 +23,7 @@ def get_title(path_to_content):
     result = Path(path_to_content).stem
     result = result.replace("_", " ")
     return result
+
+def get_prose_package_code():
+    """ Return the contents of the file. """
+    return get_contents(PATH_TO_PROSE_PACKAGE_CODE)

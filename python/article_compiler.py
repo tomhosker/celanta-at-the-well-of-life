@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 # Non-standard imports.
-from hpml import HPMLCompiler, PACKAGE_CODE
+from hpml import HPMLCompiler, PACKAGE_CODE as POEM_PACKAGE_CODE
 
 # Local imports.
 from .constants import (
@@ -18,10 +18,11 @@ from .constants import (
     HPML_EXT
 )
 from .tex_compiler import TexCompiler, TexCompilerError
-from .utils import get_contents, get_title
+from .utils import get_contents, get_title, get_prose_package_code
 
 # Local constants.
 ARTICLE_TEMPLATE = get_contents(PATH_TO_ARTICLE_TEMPLATE)
+PROSE_PACKAGE_CODE = get_prose_package_code()
 
 ##############
 # MAIN CLASS #
@@ -41,6 +42,7 @@ class ArticleCompiler(TexCompiler):
             raise TexCompilerError("path_to_content field not set")
         self.is_poem = self._get_is_poem()
         self.title = get_title(self.path_to_content)
+        self.package_code = self._get_package_code()
         self.content = self._build_content_tex()
 
     def _get_is_poem(self):
@@ -49,6 +51,13 @@ class ArticleCompiler(TexCompiler):
         if path_obj_to_content.suffix == HPML_EXT:
             return True
         return False
+
+    def _get_package_code(self):
+        """ Return the correct package code, depending on whether the article
+        in question is poetry or prose. """
+        if self.is_poem:
+            return POEM_PACKAGE_CODE
+        return PROSE_PACKAGE_CODE
 
     def _build_content_tex(self):
         """ Transform the raw content into LaTeX, if necessary """
@@ -68,7 +77,7 @@ class ArticleCompiler(TexCompiler):
         """ Build the TeX file, which we will then compile. """
         tex = ARTICLE_TEMPLATE
         find_replace_pairs = (
-            (PACKAGES_MARKER, PACKAGE_CODE),
+            (PACKAGES_MARKER, self.package_code),
             (TITLE_MARKER, self.title),
             (CONTENT_MARKER, self.content)
         )
