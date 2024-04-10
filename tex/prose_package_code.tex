@@ -1,5 +1,8 @@
 \usepackage{mathtools, marginnote, microtype}
 
+\usepackage{fontspec}
+\newfontfamily\frakturish{Fette UNZ Fraktur}
+
 \newcommand\blindfootnote[1]{%
     \begingroup
     \renewcommand\thefootnote{}\footnote{#1}%
@@ -15,3 +18,9 @@
     \bigskip
 }
 \newcommand\smallmarginnote[1]{\marginnote{\footnotesize #1}}
+\newcommand\proseepigraph[1]{
+    \begin{quote}
+        \textit{#1}
+    \end{quote}
+    \bigskip
+}
