@@ -1,36 +1,20 @@
 #!/bin/sh
 
-### This script installs any third party software used in this project.
+### This code defines a script which makes the necessary installations for
+### working with and on this project on this device.
+
+# Crash on the first non-zero exit code.
+set -e
 
 # Local constants.
-APT_PACKAGES="texlive-full"
-# Paths.
-PATH_TO_THIS_FOLDER="$(dirname "$0")"
-PATH_TO_FONTS_SRC="$PATH_TO_THIS_FOLDER/fonts"
-PATH_TO_FONTS_DST="$HOME/.fonts"
-PATH_TO_REQUIREMENTS="$PATH_TO_THIS_FOLDER/pip_requirements.txt"
+PATH_TO_THIS_DIR=$(dirname $(realpath $0))
+PATH_TO_THIRD_PARTY_DIR="$PATH_TO_THIS_DIR/third_party"
+PATH_TO_INSTALL_APT_PACKAGES="$PATH_TO_THIRD_PARTY_DIR/install_apt_packages.sh"
+PATH_TO_BUILD_VENV="$PATH_TO_THIRD_PARTY_DIR/build_venv.sh"
+PATH_TO_INSTALL_FONTS="$PATH_TO_THIRD_PARTY_DIR/install_fonts.sh"
 
-########################
-# INSTALL APT PACKAGES #
-########################
-
-echo "I'm going to need superuser privileges to install some APT packages..."
-sudo apt install --yes $APT_PACKAGES
-
-#################
-# INSTALL FONTS #
-#################
-
-# Create destination fonts folder, if necessary.
-mkdir -p $PATH_TO_FONTS_DST
-
-# Move each file across.
-for filepath in "$PATH_TO_FONTS_SRC/*.ttf"; do
-    cp -f $filepath $PATH_TO_FONTS_DST
-done
-
-########################
-# INSTALL PIP PACKAGES #
-########################
-
-pip install -r $PATH_TO_REQUIREMENTS
+# Let's get cracking...
+sh $PATH_TO_INSTALL_APT_PACKAGES
+sh $PATH_TO_BUILD_VENV
+sh $PATH_TO_INSTALL_FONTS
+echo "You can now activate the virtual environment with: . venv/bin/activate"
