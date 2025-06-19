@@ -21,5 +21,5 @@ python3 compile_project.py
 To compile the LaTeX for a given poem or story, navigate to this directory, and then run:
 
 ```sh
-python3 compile_article.py path/to/poem-or-story.tex
+    python3 compile_article.py path/to/poem-or-story.tex
 ```
