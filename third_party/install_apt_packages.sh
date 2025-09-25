@@ -8,7 +8,7 @@
 set -e
 
 # Local constants.
-APT_PACKAGES="texlive-full"
+APT_PACKAGES="texlive-full python3-venv"
 
 # Let's get cracking...
 sudo apt install --yes $APT_PACKAGES
